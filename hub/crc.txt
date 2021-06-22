@@ -1,0 +1,23 @@
+title Hub's c.r.c. pipeline
+
+
+participant featureBranch
+participant master
+participant stable
+database quay.io
+control stage #yellow
+control prod #blue
+
+
+featureBranch->featureBranch: PR check
+featureBranch->master: PR merge
+master->stable: backport
+stable->quay.io: images
+quay.io->stage: deploy
+stage->stage: Post-deployment-test
+
+group prod-gating [test passed]
+quay.io->prod: deploy
+end
+
+
